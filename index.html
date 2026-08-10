@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thota Bhavana — Software Engineer, .NET &amp; API Integrations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0B1220;
+    --surface: #121A2C;
+    --surface-2: #1A2439;
+    --border: #263252;
+    --text: #EAEEF6;
+    --text-dim: #93A1BE;
+    --accent: #3B82F6;
+    --accent-soft: rgba(59, 130, 246, 0.13);
+    --accent-2: #F5A623;
+    --accent-2-soft: rgba(245, 166, 35, 0.12);
+    --shadow: rgba(0,0,0,0.4);
+  }
+  html[data-theme="light"] {
+    --bg: #F7F9FC;
+    --surface: #FFFFFF;
+    --surface-2: #EFF3F9;
+    --border: #E1E7F0;
+    --text: #10192B;
+    --text-dim: #5B6883;
+    --accent: #2563EB;
+    --accent-soft: rgba(37, 99, 235, 0.09);
+    --accent-2: #C2760D;
+    --accent-2-soft: rgba(194, 118, 13, 0.1);
+    --shadow: rgba(20,30,55,0.08);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.65;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  .display { font-family: 'Sora', sans-serif; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  a { color: inherit; text-decoration: none; }
+  ::selection { background: var(--accent-soft); color: var(--accent); }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 28px; }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 50;
+    background: color-mix(in srgb, var(--bg) 86%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-inner {
+    max-width: 960px; margin: 0 auto; padding: 16px 28px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .logo { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 16px; letter-spacing: -0.01em; }
+  .logo span { color: var(--accent); }
+  .nav-links { display: flex; align-items: center; gap: 28px; }
+  .nav-links a {
+    font-size: 13.5px; font-weight: 500; color: var(--text-dim);
+    transition: color 0.2s ease;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  .nav-right { display: flex; align-items: center; gap: 12px; }
+  .icon-link {
+    display: flex; align-items: center; justify-content: center;
+    width: 34px; height: 34px; border-radius: 8px;
+    color: var(--text-dim); border: 1px solid var(--border); background: var(--surface-2);
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+  .icon-link:hover { color: var(--accent); border-color: var(--accent); }
+
+  .theme-toggle {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--surface-2); border: 1px solid var(--border);
+    border-radius: 20px; padding: 4px; cursor: pointer;
+    position: relative; width: 52px; height: 30px;
+  }
+  .theme-toggle .knob {
+    position: absolute; top: 3px; left: 3px;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--accent);
+    transition: transform 0.25s ease;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+  }
+  html[data-theme="light"] .theme-toggle .knob { transform: translateX(22px); }
+
+  /* HERO */
+  .hero { padding: 76px 0 60px; }
+  .badge-row { display: flex; align-items: center; gap: 16px; margin-bottom: 26px; }
+  .avatar {
+    width: 62px; height: 62px; border-radius: 16px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Sora', sans-serif; font-weight: 700; font-size: 22px; color: #fff;
+    flex-shrink: 0;
+  }
+  .open-pill {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 12.5px; font-weight: 600; color: var(--accent);
+    background: var(--accent-soft); padding: 6px 12px; border-radius: 20px;
+  }
+  .open-pill .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: pulse 1.8s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+  .hero h1 {
+    font-family: 'Sora', sans-serif; font-weight: 700;
+    font-size: clamp(30px, 4.8vw, 46px); line-height: 1.15; letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+  .hero .role { color: var(--text-dim); font-size: 17px; margin-bottom: 30px; max-width: 600px; }
+  .hero .role strong { color: var(--text); font-weight: 600; }
+
+  .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 36px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 14px; font-weight: 600; padding: 12px 20px; border-radius: 9px;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { opacity: 0.92; }
+  .btn-secondary { background: var(--surface); border: 1px solid var(--border); color: var(--text); }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .stat { background: var(--surface); padding: 20px 18px; text-align: left; }
+  .stat .num { font-family: 'Sora', sans-serif; font-size: 24px; font-weight: 700; color: var(--accent); }
+  .stat .label { font-size: 11.5px; color: var(--text-dim); margin-top: 6px; line-height: 1.45; }
+
+  /* SECTIONS */
+  section.block { padding: 54px 0; border-top: 1px solid var(--border); scroll-margin-top: 76px; }
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace; font-size: 11.5px; font-weight: 600; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px;
+  }
+  h2.sec-title { font-family: 'Sora', sans-serif; font-size: 24px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.01em; }
+  .sec-sub { color: var(--text-dim); font-size: 14.5px; margin-bottom: 30px; max-width: 620px; }
+
+  /* EXPERIENCE */
+  .role-card { border: 1px solid var(--border); background: var(--surface); border-radius: 12px; padding: 24px 26px; margin-bottom: 16px; }
+  .role-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+  .role-head .title { font-weight: 700; font-size: 16px; }
+  .role-head .date { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent); background: var(--accent-soft); padding: 4px 10px; border-radius: 5px; }
+  .role-card ul { list-style: none; }
+  .role-card li { position: relative; padding-left: 24px; margin-bottom: 9px; font-size: 14.5px; color: var(--text-dim); }
+  .role-card li::before {
+    content: ""; position: absolute; left: 0; top: 7px;
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--accent-soft); border: 1.5px solid var(--accent);
+  }
+
+  /* PROJECTS */
+  .project { border: 1px solid var(--border); background: var(--surface); border-radius: 12px; margin-bottom: 18px; }
+  .project-head { border-radius: 12px 12px 0 0; }
+  .project-body { border-radius: 0 0 12px 12px; }
+  .project-head { padding: 20px 26px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; border-bottom: 1px solid var(--border); }
+  .project-name { font-family: 'Sora', sans-serif; font-size: 16.5px; font-weight: 700; }
+  .badge { font-size: 11.5px; font-weight: 700; color: var(--accent); background: var(--accent-soft); padding: 4px 11px; border-radius: 20px; position: relative; cursor: default; }
+  .badge::after {
+    content: attr(data-tooltip);
+    position: absolute; bottom: calc(100% + 10px); right: 0;
+    background: var(--text); color: var(--bg);
+    font-size: 12px; font-weight: 500; font-family: 'Inter', sans-serif;
+    line-height: 1.4;
+    padding: 9px 13px; border-radius: 8px; white-space: nowrap;
+    opacity: 0; visibility: hidden; transform: translateY(4px);
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    box-shadow: 0 8px 20px var(--shadow);
+    z-index: 20;
+  }
+  .badge::before {
+    content: "";
+    position: absolute; bottom: calc(100% + 4px); right: 14px;
+    border: 6px solid transparent; border-top-color: var(--text);
+    opacity: 0; visibility: hidden; transform: translateY(4px);
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    z-index: 20;
+  }
+  .badge:hover::after, .badge:focus-visible::after,
+  .badge:hover::before, .badge:focus-visible::before { opacity: 1; visibility: visible; transform: translateY(0); }
+  .project-body { padding: 20px 26px 24px; }
+  .project-body p.desc { color: var(--text-dim); font-size: 14px; margin-bottom: 16px; }
+  .project-body ul { list-style: none; margin-bottom: 16px; }
+  .project-body li { position: relative; padding-left: 24px; margin-bottom: 8px; font-size: 14px; color: var(--text-dim); }
+  .project-body li::before {
+    content: ""; position: absolute; left: 0; top: 6px;
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--accent-soft); border: 1.5px solid var(--accent);
+  }
+  .params { display: flex; flex-wrap: wrap; gap: 8px; }
+  .param { font-size: 12px; font-weight: 500; color: var(--text-dim); border: 1px solid var(--border); padding: 4px 11px; border-radius: 20px; background: var(--surface-2); }
+
+  /* SKILLS */
+  .skill-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; }
+  .skill-group { border: 1px solid var(--border); background: var(--surface); border-radius: 12px; padding: 20px 22px; }
+  .skill-group .grp-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+  .skill-group .items { font-size: 14px; color: var(--text-dim); line-height: 1.75; }
+
+  /* EDU / CERTS */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .info-card { border: 1px solid var(--border); background: var(--surface); border-radius: 12px; padding: 22px 24px; }
+  .info-card h3 { font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 700; color: var(--accent); margin-bottom: 16px; }
+  .info-item { margin-bottom: 14px; }
+  .info-item:last-child { margin-bottom: 0; }
+  .info-item .name { font-size: 14px; font-weight: 600; }
+  .info-item .meta { font-size: 12.5px; color: var(--text-dim); margin-top: 2px; }
+
+  /* CONTACT */
+  .contact-block {
+    border: 1px solid var(--border); background: linear-gradient(160deg, var(--surface), var(--surface-2));
+    border-radius: 16px; padding: 40px 36px; text-align: left;
+  }
+  .contact-block h2 { margin-bottom: 6px; }
+  .contact-links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+  .contact-links a {
+    font-size: 14px; font-weight: 600;
+    border: 1px solid var(--border); padding: 12px 18px; border-radius: 9px;
+    display: flex; align-items: center; gap: 9px; transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+    background: var(--surface);
+  }
+  .contact-links a.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .contact-links a.primary:hover { opacity: 0.92; }
+  .contact-links a:not(.primary):hover { border-color: var(--accent); color: var(--accent); }
+  .contact-links svg { flex-shrink: 0; }
+
+  footer { padding: 30px 0 54px; text-align: center; font-size: 12.5px; color: var(--text-dim); border-top: 1px solid var(--border); }
+
+  @media (max-width: 640px) {
+    .nav-inner { flex-wrap: wrap; gap: 12px; padding-bottom: 12px; }
+    .nav-links {
+      order: 3; width: 100%; overflow-x: auto; gap: 20px;
+      padding-bottom: 2px; scrollbar-width: none;
+    }
+    .nav-links::-webkit-scrollbar { display: none; }
+    .nav-links a { white-space: nowrap; }
+    .stat-row { grid-template-columns: 1fr; }
+    .two-col { grid-template-columns: 1fr; }
+    .role-head { flex-direction: column; align-items: flex-start; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo">Bhavana</div>
+    <div class="nav-links">
+      <a href="#experience">Experience</a>
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#education">Education</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="nav-right">
+      <a class="icon-link" href="https://github.com/ThotaBhavana76" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile" title="GitHub">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38v-1.49c-2.23.48-2.7-1.07-2.7-1.07-.36-.93-.89-1.17-.89-1.17-.72-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.71 1.22 1.87.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.65-.89-3.65-3.96 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.13 0 0 .67-.22 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.11.16 1.93.08 2.13.51.56.82 1.28.82 2.15 0 3.08-1.87 3.75-3.66 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+      </a>
+      <a class="icon-link" href="https://www.linkedin.com/in/bhavana-thota-610847198/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile" title="LinkedIn">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M13.5 0h-11A2.5 2.5 0 0 0 0 2.5v11A2.5 2.5 0 0 0 2.5 16h11a2.5 2.5 0 0 0 2.5-2.5v-11A2.5 2.5 0 0 0 13.5 0ZM4.94 13.44H2.4V6h2.54v7.44ZM3.67 4.93a1.47 1.47 0 1 1 0-2.94 1.47 1.47 0 0 1 0 2.94Zm9.77 8.51h-2.53V9.83c0-.86-.02-1.96-1.2-1.96-1.2 0-1.38.94-1.38 1.9v3.67H5.8V6h2.43v1.02h.03c.34-.64 1.16-1.31 2.39-1.31 2.56 0 3.03 1.68 3.03 3.87v3.86Z"/></svg>
+      </a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark and light mode">
+        <span class="knob" id="knob">◐</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <section class="hero">
+    <div class="badge-row">
+      <div class="avatar">TB</div>
+      <span class="open-pill"><span class="live-dot"></span>Open to new opportunities</span>
+    </div>
+    <h1>Thota Bhavana Naga Sai Durga</h1>
+    <p class="role">Software Engineer building <strong>.NET backend systems</strong> and <strong>ATS API integrations</strong> — Indeed, LinkedIn, JobTarget — with 3+ years delivering reliable, high-availability enterprise applications.</p>
+
+    <div class="cta-row">
+      <a class="btn btn-primary" href="mailto:thotabhavana1@gmail.com">Email me</a>
+      <a class="btn btn-secondary" href="tel:+918074141985">Call: +91 80741 41985</a>
+      <a class="btn btn-secondary" href="https://www.linkedin.com/in/bhavana-thota-610847198/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat"><div class="num">3+</div><div class="label">Years in .NET &amp; API integration roles</div></div>
+      <div class="stat"><div class="num">99.9%</div><div class="label">Uptime maintained on production ATS integrations</div></div>
+      <div class="stat"><div class="num">40%</div><div class="label">Reduction in data-sync delays after pipeline rebuild</div></div>
+      <div class="stat"><div class="num">70%</div><div class="label">Drop in manual data correction after XSLT automation</div></div>
+    </div>
+  </section>
+
+  <section id="experience" class="block">
+    <div class="eyebrow">Career</div>
+    <h2 class="sec-title">Where I've worked</h2>
+    <p class="sec-sub">Two years in, still on the same team — moved from associate to full engineer on the strength of the integrations below.</p>
+
+    <div class="role-card">
+      <div class="role-head">
+        <span class="title">Software Engineer, Infinite Computer Solutions</span>
+        <span class="date">Sep 2024 — Present</span>
+      </div>
+      <ul>
+        <li>Designed and developed scalable RESTful APIs for ATS integrations, improving job posting accuracy by 30%</li>
+        <li>Built real-time data synchronization pipelines, reducing sync delays by 40%</li>
+        <li>Implemented error handling, logging, and retry mechanisms, cutting integration failures by 25%</li>
+        <li>Mentored junior developers on integration architecture and code quality</li>
+      </ul>
+    </div>
+
+    <div class="role-card">
+      <div class="role-head">
+        <span class="title">Associate Software Engineer, Infinite Computer Solutions</span>
+        <span class="date">Sep 2022 — Sep 2024</span>
+      </div>
+      <ul>
+        <li>Developed and optimized SQL stored procedures, improving data retrieval and processing efficiency</li>
+        <li>Led XSLT-based data transformation work, reducing manual data correction effort by 70%</li>
+        <li>Collaborated cross-functionally to ship features on deadline</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="projects" class="block">
+    <div class="eyebrow">Selected work</div>
+    <h2 class="sec-title">Integration projects</h2>
+    <p class="sec-sub">Three job-board integrations, each with its own auth model, schema, and failure modes.</p>
+
+    <div class="project">
+      <div class="project-head">
+        <span class="project-name">Indeed</span>
+        <span class="badge" data-tooltip="Live in production, actively used by the ATS" tabindex="0">Shipped</span>
+      </div>
+      <div class="project-body">
+        <p class="desc">Two-way data exchange between the ATS and Indeed — job syndication out, candidate applications in.</p>
+        <ul>
+          <li>Job listing syndication workflow, improving posting success rate by 35% through validation and retries</li>
+          <li>Candidate application ingestion pipeline, cutting data sync errors by 20%</li>
+          <li>SQL stored procedures for screening questions and responses</li>
+          <li>Monitoring and debugging tooling to track API failures</li>
+        </ul>
+        <div class="params">
+          <span class="param">ASP.NET</span><span class="param">Web API</span><span class="param">SQL Server</span><span class="param">JSON / XML</span><span class="param">Postman</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project">
+      <div class="project-head">
+        <span class="project-name">LinkedIn</span>
+        <span class="badge" data-tooltip="Live in production, actively used by the ATS" tabindex="0">Shipped</span>
+      </div>
+      <div class="project-body">
+        <p class="desc">OAuth-secured connectivity for job posting, candidate apply flow, and profile sync.</p>
+        <ul>
+          <li>Secure OAuth 2.0 authentication flow for LinkedIn API connectivity</li>
+          <li>XSLT transformation to map job data to LinkedIn's schema, improving accuracy by ~25%</li>
+          <li>Redirect-based apply flows with tracking URLs and signature validation</li>
+          <li>Backend logic for candidate application data and screening questions</li>
+        </ul>
+        <div class="params">
+          <span class="param">.NET</span><span class="param">OAuth 2.0</span><span class="param">XSLT</span><span class="param">Stored Procedures</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project">
+      <div class="project-head">
+        <span class="project-name">JobTarget</span>
+        <span class="badge" data-tooltip="Live in production, actively used by the ATS" tabindex="0">Shipped</span>
+      </div>
+      <div class="project-body">
+        <p class="desc">Structured JSON pipeline for requisition data out and applicant data in, in real time.</p>
+        <ul>
+          <li>Structured JSON APIs to transmit requisition and job data to JobTarget</li>
+          <li>Automated real-time candidate ingestion APIs</li>
+          <li>XSLT transformation logic to standardize postings for schema compliance</li>
+          <li>Data validation that cut failed transactions by 30%</li>
+        </ul>
+        <div class="params">
+          <span class="param">.NET Core</span><span class="param">Web API</span><span class="param">XSLT</span><span class="param">SQL Server</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills" class="block">
+    <div class="eyebrow">Toolkit</div>
+    <h2 class="sec-title">Skills</h2>
+    <p class="sec-sub">&nbsp;</p>
+    <div class="skill-grid">
+      <div class="skill-group">
+        <div class="grp-label">Programming &amp; Frameworks</div>
+        <div class="items">ASP.NET, .NET Core, MVC, Web API</div>
+      </div>
+      <div class="skill-group">
+        <div class="grp-label">API &amp; Integrations</div>
+        <div class="items">REST APIs, OAuth 2.0, HMAC signature validation, third-party integrations</div>
+      </div>
+      <div class="skill-group">
+        <div class="grp-label">Data &amp; Transformation</div>
+        <div class="items">SQL Server, stored procedures, XSLT, XML, JSON</div>
+      </div>
+      <div class="skill-group">
+        <div class="grp-label">Cloud &amp; DevOps</div>
+        <div class="items">Azure DevOps, CI/CD basics, API monitoring</div>
+      </div>
+      <div class="skill-group">
+        <div class="grp-label">Tools &amp; Platforms</div>
+        <div class="items">Postman, Jira, ATS systems, Indeed, LinkedIn, JobTarget</div>
+      </div>
+      <div class="skill-group">
+        <div class="grp-label">Concepts</div>
+        <div class="items">Microservices, system integration, performance optimization, debugging, data validation</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="education" class="block">
+    <div class="eyebrow">Background</div>
+    <h2 class="sec-title">Education &amp; certifications</h2>
+    <p class="sec-sub">&nbsp;</p>
+    <div class="two-col">
+      <div class="info-card">
+        <h3>Education</h3>
+        <div class="info-item">
+          <div class="name">B.Tech, Computer Science</div>
+          <div class="meta">Sri Mittapalli Institute of Engineering for Women, JNTUK · 2022</div>
+        </div>
+        <div class="info-item">
+          <div class="name">Intermediate</div>
+          <div class="meta">Narayana Junior College · 2018</div>
+        </div>
+        <div class="info-item">
+          <div class="name">SSC</div>
+          <div class="meta">Naveena High School · 2016</div>
+        </div>
+      </div>
+      <div class="info-card">
+        <h3>Certifications &amp; training</h3>
+        <div class="info-item">
+          <div class="name">.NET Full Stack Development</div>
+          <div class="meta">Nov 2022 — Apr 2023</div>
+        </div>
+        <div class="info-item">
+          <div class="name">Java Full Stack Development</div>
+          <div class="meta">Jun 2022 — Aug 2022</div>
+        </div>
+        <div class="info-item">
+          <div class="name">Blockchain Technology</div>
+          <div class="meta">Training program</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="block">
+    <div class="eyebrow">Get in touch</div>
+    <div class="contact-block">
+      <h2 class="sec-title">Let's talk</h2>
+      <p style="color:var(--text-dim); font-size:14.5px; max-width:520px;">Open to backend and integrations roles at product and enterprise teams — happy to walk through any of the projects above in more detail.</p>
+      <div class="contact-links">
+        <a class="primary" href="mailto:thotabhavana1@gmail.com">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M1.5 3A1.5 1.5 0 0 0 0 4.5v.383l8 4.615 8-4.615V4.5A1.5 1.5 0 0 0 14.5 3h-13ZM16 6.383l-8 4.615-8-4.615V11.5A1.5 1.5 0 0 0 1.5 13h13a1.5 1.5 0 0 0 1.5-1.5V6.383Z"/></svg>
+          thotabhavana1@gmail.com
+        </a>
+        <a href="tel:+918074141985">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M3.65 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.6 17.6 0 0 0 4.168 6.608 17.6 17.6 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.68.68 0 0 0-.58-.122l-2.19.547a1.75 1.75 0 0 1-1.657-.459L5.482 8.062a1.75 1.75 0 0 1-.46-1.657l.548-2.19a.68.68 0 0 0-.122-.58L3.654 1.328Z"/></svg>
+          +91 80741 41985
+        </a>
+        <a href="https://www.linkedin.com/in/bhavana-thota-610847198/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="https://github.com/ThotaBhavana76" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>Thota Bhavana Naga Sai Durga · Based in India</footer>
+
+<script>
+  const html = document.documentElement;
+  const knob = document.getElementById('knob');
+  const toggle = document.getElementById('themeToggle');
+  function setKnob() {
+    knob.textContent = html.getAttribute('data-theme') === 'dark' ? '◐' : '◑';
+  }
+  setKnob();
+  toggle.addEventListener('click', () => {
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    setKnob();
+  });
+</script>
+
+</body>
+</html>
